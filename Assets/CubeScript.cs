@@ -25,9 +25,7 @@ public class CubeScript : MonoBehaviour {
 		}
 		if (Input.GetKeyUp (KeyCode.Alpha2) && triangular_move == false) {
 			StartCoroutine (TriMove ());
-		} else if (Input.GetKeyUp (KeyCode.Alpha3) && vertical_move == true) {
-			StartCoroutine (vertiMove ());
-		}
+		} 
 	}
 
 	
@@ -59,17 +57,17 @@ public class CubeScript : MonoBehaviour {
 		triangular_move = true;
 		vertical_move = true;
 
-			for (int i=0; i<20; i++) {
-				transform.Translate (.25f, 0, 0);
-				yield return new WaitForSeconds(.1f);
+			for (int i=0; i<50; i++) {
+				transform.Translate (.1f, 0, 0);
+				yield return new WaitForSeconds(.04f);
 			}
-			for (int i=0; i<20; i++) {
-				transform.Translate (-.25f, 0, .25f);
-				yield return new WaitForSeconds(.1f);
+			for (int i=0; i<50; i++) {
+				transform.Translate (-.1f, 0, .1f);
+				yield return new WaitForSeconds(.04f);
 			}
-			for (int i=0; i<20; i++) {
-				transform.Translate (0, 0,-.25f);
-				yield return new WaitForSeconds(.1f);
+			for (int i=0; i<50; i++) {
+				transform.Translate (0, 0,-.1f);
+				yield return new WaitForSeconds(.04f);
 		}
 		yield return StartCoroutine (TriMove ());
 	}
