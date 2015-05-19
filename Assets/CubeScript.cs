@@ -7,6 +7,8 @@ public class CubeScript : MonoBehaviour {
 	public GoTweenChain vertical;
 	bool triangular_move = false;
 	bool vertical_move = false;
+	bool buttonThree =false;
+	bool paused = false;
 	
 	// Use this for initialization
 	void Start () {
@@ -16,17 +18,21 @@ public class CubeScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (Input.GetKeyUp (KeyCode.Alpha1) && triangular_move == false) { 
+		if (Input.GetKeyUp (KeyCode.Alpha1) && triangular_move == false && buttonThree == false) { 
 			triangularMove ();
-		} else if (Input.GetKeyUp (KeyCode.Alpha3) && vertical_move == true) {
+			buttonThree = true;
+		} else if (Input.GetKeyUp (KeyCode.Alpha3) && vertical_move == true && buttonThree == true) {
 			triangular.pause ();
 			verticalMove ();
 			vertical_move = true;
+			buttonThree = true;
 		}
-		if (Input.GetKeyUp (KeyCode.Alpha2) && triangular_move == false) {
+		else if (Input.GetKeyUp (KeyCode.Alpha2) && triangular_move == false && buttonThree == false && paused==false) {
 			StartCoroutine (TriMove ());
-		} 
+			buttonThree = true;
+		}
 	}
+
 
 	
 	void triangularMove(){
@@ -60,19 +66,30 @@ public class CubeScript : MonoBehaviour {
 			for (int i=0; i<50; i++) {
 				transform.Translate (.1f, 0, 0);
 				yield return new WaitForSeconds(.04f);
+			if (Input.GetKeyUp (KeyCode.Space) && vertical_move == true && buttonThree == true && paused==false ) {
+				yield return StartCoroutine (vertiMove ());
+				}
 			}
 			for (int i=0; i<50; i++) {
 				transform.Translate (-.1f, 0, .1f);
 				yield return new WaitForSeconds(.04f);
+			if (Input.GetKeyUp (KeyCode.Space) && vertical_move == true && buttonThree == true && paused==false ) {
+				yield return StartCoroutine (vertiMove ());
+			}
 			}
 			for (int i=0; i<50; i++) {
 				transform.Translate (0, 0,-.1f);
 				yield return new WaitForSeconds(.04f);
+			if (Input.GetKeyUp (KeyCode.Space) && vertical_move == true && buttonThree == true && paused==false ) {
+				yield return StartCoroutine (vertiMove ());
+			}
 		}
+		paused = false;
 		yield return StartCoroutine (TriMove ());
 	}
 		IEnumerator vertiMove(){
 		vertical_move = false;
+		paused = true;
 		for (int i=0; i<20; i++) {
 			transform.Translate (0, .25f, 0);
 			yield return new WaitForSeconds (.05f);
