@@ -5,11 +5,10 @@ using UnityEngine.UI;
 public class CountTime : MonoBehaviour
 {
 
-
 	Text mytext;
-	private float hour = 0.0f;
-	private float minute = 0.0f;
-	private float second = 0.0f;
+	private float minute = 1.0f;
+	private float second = 1.0f;
+
 
 	void Start ()
 	{
@@ -18,15 +17,14 @@ public class CountTime : MonoBehaviour
 
 	void Update ()
 	{
-		second += Time.deltaTime;
-		if (second >= 60) {
-			minute += 1.0f;
-			second = Time.deltaTime;
+		second -= Time.deltaTime;
+		if (second < 0 ) {
+			minute --;
+			second = 60.0f;
 		}
-		if (minute >= 60) {
-			hour += 1.0f;
-			minute = Time.deltaTime;
+		mytext.text = string.Format ("T I M E = " + ((int)minute).ToIntString (2) + " : " + ((int)second).ToIntString (2));
+		if (minute < 0) {
+			mytext.text = string.Format ("GAME OVER");
 		}
-		mytext.text = string.Format ("T I M E = " + ((int)hour).ToIntString (2) + ":" + ((int)minute).ToIntString (2) + ":" + ((int)second).ToIntString (2));
 	}
 }
