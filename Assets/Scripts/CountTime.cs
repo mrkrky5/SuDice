@@ -35,7 +35,9 @@ public class CountTime : MonoBehaviour
 				emre.levels.SetActive (false);
 				emre.minutes.SetActive (false);
 				emre.zaman.SetActive (false);
+				emre.score.SetActive (false);
 				emre.theEnd.SetActive(true);
+				emre.music.Stop();
 			}
 		}
 	}

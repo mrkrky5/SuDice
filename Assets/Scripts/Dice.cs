@@ -13,6 +13,10 @@ public class Dice : MonoBehaviour {
 
 	private MeshRenderer rend;
 
+	public AudioSource diceSound;
+
+	private int dakika;
+
 	public int _value = -1;
 	public int Value{
 		get{return _value;}
@@ -125,5 +129,6 @@ public class Dice : MonoBehaviour {
 	{
 		IsAnimationPlaying = true;
 		TempTime = Time.time;
+		diceSound.Play ();
 	}
 }

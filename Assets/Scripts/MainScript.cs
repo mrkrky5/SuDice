@@ -16,14 +16,23 @@ public class MainScript : MonoBehaviour
 	public GameObject minutes;
 	public GameObject zaman;
 	public GameObject theEnd;
-
+	public GameObject score;
+	
 	private int minute;
-	private int level;
-	public int count = 0;
+	public static int level;
+	public static int count;
+
+	public AudioSource lockClick;
+	public AudioSource music;
+	public AudioSource completed;
+
+
 
 	void Awake ()
 	{
-		Instance = this;		
+		Instance = this;
+		count = 0;
+		music = gameObject.GetComponent<AudioSource>();
 
 		sudoku = GameObject.Find ("Sudoku");
 		sudoku.SetActive (false);
@@ -35,6 +44,9 @@ public class MainScript : MonoBehaviour
 		zaman.SetActive (false);
 		theEnd = GameObject.Find ("TheEnd");
 		theEnd.SetActive(false);
+		score = GameObject.Find ("Score");
+		score.SetActive (false);
+
 	}
 
 	public enum Solution{
@@ -303,7 +315,8 @@ public class MainScript : MonoBehaviour
 			return;
 		if (previousClick == i && (Time.time - tempClickTime) < 0.2f) {
 
-				dices [i].Pinned = ! dices [i].Pinned;
+			lockClick.Play();	
+			dices [i].Pinned = ! dices [i].Pinned;
 		} else {
 			tempClickTime=Time.time;
 			previousClick = i;
@@ -335,19 +348,21 @@ public class MainScript : MonoBehaviour
 	public void SecondClick(int j){
 		switch (j) {
 		case 0:
-			minute = 5;
-			break;
-		case 1:
 			minute = 10;
 			break;
-		case 2:
+		case 1:
 			minute = 20;
+			break;
+		case 2:
+			minute = 30;
 			break;
 		}
 		sudoku.SetActive (true);
 		levels.SetActive (false);
 		minutes.SetActive (false);
 		zaman.SetActive (true);
+		score.SetActive (true);
+
 		StartSudoku ();
 	} 
 	public void BackClick(){
@@ -357,13 +372,14 @@ public class MainScript : MonoBehaviour
 	} 
 	public void StartSudoku(){
 		SudokuGenerate ();
+		completed.Play ();
 		var ahmet = GameObject.FindObjectOfType<CountTime> ();
 		ahmet.started = true;
 		ahmet.min = minute;
 
 	}
-	public void SudokuGenerate(){
 
+	public void SudokuGenerate(){
 		var generated = Genisys ();
 		var removed = RemoveNumbers (generated);
 		for (int i =0; i<36; i++) {
