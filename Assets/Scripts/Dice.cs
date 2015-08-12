@@ -27,7 +27,7 @@ public class Dice : MonoBehaviour {
 	private bool locked;
 	public bool Locked {
 		get{return locked;}
-		set{if(value==locked) return;
+		set{
 			locked=value;
 			if(value){
 				rend.materials[4].color=new Color(0.717f,0.776f,0.545f);
@@ -43,7 +43,6 @@ public class Dice : MonoBehaviour {
 	public bool Pinned {
 		get{return pinned;}
 		set{
-			if(value==pinned) return;
 			pinned=value;
 			if(value)
 			{

@@ -50,7 +50,6 @@
      <Compile Include="Assets\Scripts\Dice.cs" />
      <Compile Include="Assets\Scripts\ExtensionMethods.cs" />
      <Compile Include="Assets\Scripts\MainScript.cs" />
-     <Compile Include="Assets\Scripts\MenuSelection.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

@@ -6,8 +6,8 @@ public class CountTime : MonoBehaviour
 {
 
 	Text mytext;
-	private float minute = 1.0f;
-	private float second = 1.0f;
+	public float min;
+	public float second = 0.0f;
 
 
 	void Start ()
@@ -15,16 +15,28 @@ public class CountTime : MonoBehaviour
 		mytext = GetComponent<Text> ();
 	}
 
+	public bool started = false;
+
+	IEnumerator WaitSomeSecond(){
+		yield return new WaitForSeconds (5);
+	}
 	void Update ()
 	{
-		second -= Time.deltaTime;
-		if (second < 0 ) {
-			minute --;
-			second = 60.0f;
-		}
-		mytext.text = string.Format ("T I M E = " + ((int)minute).ToIntString (2) + " : " + ((int)second).ToIntString (2));
-		if (minute < 0) {
-			mytext.text = string.Format ("GAME OVER");
+		if (started) {
+			second -= Time.deltaTime;
+			if (second < 0) {
+				min --;
+				second = 60.0f;
+			}
+			mytext.text = string.Format ("T I M E = " + ((int)min).ToIntString (2) + " : " + ((int)second).ToIntString (2));
+			if (min < 0) {
+				var emre = GameObject.FindObjectOfType<MainScript> ();
+				emre.sudoku.SetActive (false);
+				emre.levels.SetActive (false);
+				emre.minutes.SetActive (false);
+				emre.zaman.SetActive (false);
+				emre.theEnd.SetActive(true);
+			}
 		}
 	}
 }

@@ -11,17 +11,30 @@ public class MainScript : MonoBehaviour
 	public Texture[] textures;
 	public static MainScript Instance;
 
+	public GameObject sudoku;
+	public GameObject levels;
+	public GameObject minutes;
+	public GameObject zaman;
+	public GameObject theEnd;
+
+	private int minute;
+	private int level;
+	public int count = 0;
+
 	void Awake ()
 	{
 		Instance = this;		
-		var generated = Genisys ();
-		var removed = RemoveNumbers (generated);
-		for (int i =0; i<36; i++) {
-			dices [i]._value = removed [i];
-		}
-		for (int i =0; i<36; i++) {
-			dices [i].AwakeMe ();
-		}
+
+		sudoku = GameObject.Find ("Sudoku");
+		sudoku.SetActive (false);
+		levels = GameObject.Find ("EasyMediumHard");
+		levels.SetActive (true);
+		minutes = GameObject.Find ("Minutes");
+		minutes.SetActive (false);
+		zaman = GameObject.Find ("Zaman");
+		zaman.SetActive (false);
+		theEnd = GameObject.Find ("TheEnd");
+		theEnd.SetActive(false);
 	}
 
 	public enum Solution{
@@ -111,13 +124,13 @@ public class MainScript : MonoBehaviour
 
 	public int[] RemoveNumbers(int[] generated)
 	{
+		var deleted = level;
 		var sudoku = (int[])generated.Clone(); 
 		var list = new List<int> (36);
 		for (int i=0; i<36; i++) 
 		{
 			list.Add(i);
 		}
-		int deleted = 26;
 		while (deleted>0) {
 			var selected = list[Random.Range(0,list.Count)];
 			var temp = sudoku[selected];
@@ -130,7 +143,7 @@ public class MainScript : MonoBehaviour
 			else
 			{
 			list.Remove(selected);
-			deleted--;
+				deleted--;
 			}
 		}
 		return sudoku;
@@ -182,14 +195,22 @@ public class MainScript : MonoBehaviour
 			}
 		}
 	}
-	
 
+	public void Sifirla(){
+		for (int i =0; i<36; i++) {
+			dices [i].Locked=false;
+			dices [i].Pinned=false;
+			dices[i]._value = -1;
+		}
+	}
 
 	public void CheckBoard ()
 	{
 		var istrue = ControlBoard ();
 		if (istrue) {
-			atLast ();
+			count++;
+			Sifirla();
+			SudokuGenerate();
 		}
 	}
 	
@@ -226,11 +247,7 @@ public class MainScript : MonoBehaviour
 		}
 		return true;
 	}
-
-	void atLast ()
-	{
-		Application.LoadLevel ("Finito");
-	}
+	
 
 	public void beginDrag ()
 	{
@@ -292,10 +309,68 @@ public class MainScript : MonoBehaviour
 			previousClick = i;
 		}
 	}
+
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.Escape))
+	 		if (Input.GetKeyDown (KeyCode.Escape))
 			Application.Quit ();
-	
+	}
+
+	public void FirstClick(int i){
+		switch (i) {
+		case 0:
+			level = 22;
+			break;
+		case 1:
+			level = 24;
+			break;
+		case 2:
+			level = 26;
+			break;
+		}
+		sudoku.SetActive (false);
+		levels.SetActive (false);
+		minutes.SetActive (true);
+		} 
+	public void SecondClick(int j){
+		switch (j) {
+		case 0:
+			minute = 5;
+			break;
+		case 1:
+			minute = 10;
+			break;
+		case 2:
+			minute = 20;
+			break;
+		}
+		sudoku.SetActive (true);
+		levels.SetActive (false);
+		minutes.SetActive (false);
+		zaman.SetActive (true);
+		StartSudoku ();
+	} 
+	public void BackClick(){
+		sudoku.SetActive (false);
+		levels.SetActive (true);
+		minutes.SetActive (false);
+	} 
+	public void StartSudoku(){
+		SudokuGenerate ();
+		var ahmet = GameObject.FindObjectOfType<CountTime> ();
+		ahmet.started = true;
+		ahmet.min = minute;
+
+	}
+	public void SudokuGenerate(){
+
+		var generated = Genisys ();
+		var removed = RemoveNumbers (generated);
+		for (int i =0; i<36; i++) {
+			dices [i]._value = removed [i];
+		}
+		for (int i =0; i<36; i++) {
+			dices [i].AwakeMe ();
+		}
 	}
 }
