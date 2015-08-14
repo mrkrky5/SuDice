@@ -329,7 +329,7 @@ public class MainScript : MonoBehaviour
 			Application.Quit ();
 	}
 
-	public void FirstClick(int i){
+	public void ToMinutes(int i){
 		switch (i) {
 		case 0:
 			level = 22;
@@ -345,7 +345,7 @@ public class MainScript : MonoBehaviour
 		levels.SetActive (false);
 		minutes.SetActive (true);
 		} 
-	public void SecondClick(int j){
+	public void ToSudoku(int j){
 		switch (j) {
 		case 0:
 			minute = 10;
@@ -365,14 +365,13 @@ public class MainScript : MonoBehaviour
 
 		StartSudoku ();
 	} 
-	public void BackClick(){
+	public void ToLevels(){
 		sudoku.SetActive (false);
 		levels.SetActive (true);
 		minutes.SetActive (false);
 	} 
 	public void StartSudoku(){
 		SudokuGenerate ();
-		completed.Play ();
 		var ahmet = GameObject.FindObjectOfType<CountTime> ();
 		ahmet.started = true;
 		ahmet.min = minute;
@@ -388,5 +387,6 @@ public class MainScript : MonoBehaviour
 		for (int i =0; i<36; i++) {
 			dices [i].AwakeMe ();
 		}
+		completed.Play ();
 	}
 }
