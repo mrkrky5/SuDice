@@ -17,8 +17,13 @@ public class MainScript : MonoBehaviour
 	public GameObject zaman;
 	public GameObject theEnd;
 	public GameObject score;
-	
+	public GameObject menu;
+	public GameObject voice;
+	public GameObject voice2;
+	public GameObject timeScore;
+
 	private int minute;
+
 	public static int level;
 	public static int count;
 
@@ -26,30 +31,45 @@ public class MainScript : MonoBehaviour
 	public AudioSource music;
 	public AudioSource completed;
 
+	public Button soundButton;
+	public Button soundButton2;
 
+	public Sprite newSprite;
+	public Sprite oldSprite;
+
+	public Text timeText;
 
 	void Awake ()
 	{
 		Instance = this;
 		count = 0;
-		music = gameObject.GetComponent<AudioSource>();
+		music = gameObject.GetComponent<AudioSource> ();
 
+		menu = GameObject.Find ("MainMenu");
+		menu.SetActive (true);
 		sudoku = GameObject.Find ("Sudoku");
 		sudoku.SetActive (false);
 		levels = GameObject.Find ("EasyMediumHard");
-		levels.SetActive (true);
+		levels.SetActive (false);
 		minutes = GameObject.Find ("Minutes");
 		minutes.SetActive (false);
 		zaman = GameObject.Find ("Zaman");
 		zaman.SetActive (false);
 		theEnd = GameObject.Find ("TheEnd");
-		theEnd.SetActive(false);
+		theEnd.SetActive (false);
 		score = GameObject.Find ("Score");
 		score.SetActive (false);
+		voice = GameObject.Find ("Voice");
+		voice.SetActive (true);
+		voice2 = GameObject.Find ("Voice2");
+		voice2.SetActive (false);
+		timeScore = GameObject.Find ("TimeScore");
+		timeScore.SetActive (false);
 
 	}
 
-	public enum Solution{
+	public enum Solution
+	{
 		Unique,
 		NotUnique,
 		NoSolution
@@ -79,37 +99,30 @@ public class MainScript : MonoBehaviour
 							P [sudoku [((dy * 12) + (dx * 3)) + k + (j * 6)] + 1] = -1;
 						}
 					}
-					int cP =0;
-					for(int d=1;d<7;d++)
-					{
-						cP+=P[d]== -1 ? 0: 1;
+					int cP = 0;
+					for (int d=1; d<7; d++) {
+						cP += P [d] == -1 ? 0 : 1;
 					}
-					if(cP<ctempP)
-					{
-						ctempP=cP;
-						tempP=P;
-						tempX=x;
-						tempY=y;
+					if (cP < ctempP) {
+						ctempP = cP;
+						tempP = P;
+						tempX = x;
+						tempY = y;
 					}
 				}
 			}
 		}
-		if (ctempP == 7)
-		{
+		if (ctempP == 7) {
 			return Solution.Unique;
 		}
-		if (ctempP == 0)
-		{
+		if (ctempP == 0) {
 			return Solution.NoSolution;
 		}
 		int success = 0;
-		for (int i=1; i<7; i++) 
-		{
-			if(tempP[i]!= -1)
-			{
-				sudoku[tempY*6+tempX] = tempP[i];
-				switch(IsUnique(sudoku))
-				{
+		for (int i=1; i<7; i++) {
+			if (tempP [i] != -1) {
+				sudoku [tempY * 6 + tempX] = tempP [i];
+				switch (IsUnique (sudoku)) {
 				case Solution.Unique:
 					success++;
 					break;
@@ -119,7 +132,7 @@ public class MainScript : MonoBehaviour
 					return Solution.NotUnique;
 				}
 
-			if(success>1)
+				if (success > 1)
 					return Solution.NotUnique;
 			}
 		}
@@ -134,27 +147,23 @@ public class MainScript : MonoBehaviour
 		}
 	}
 
-	public int[] RemoveNumbers(int[] generated)
+	public int[] RemoveNumbers (int[] generated)
 	{
 		var deleted = level;
-		var sudoku = (int[])generated.Clone(); 
+		var sudoku = (int[])generated.Clone (); 
 		var list = new List<int> (36);
-		for (int i=0; i<36; i++) 
-		{
-			list.Add(i);
+		for (int i=0; i<36; i++) {
+			list.Add (i);
 		}
 		while (deleted>0) {
-			var selected = list[Random.Range(0,list.Count)];
-			var temp = sudoku[selected];
-			sudoku[selected] = -1;
-			var clone = (int[])sudoku.Clone();
-			if(IsUnique(clone)!= Solution.Unique)
-			{
-				sudoku[selected] = temp;
-			}
-			else
-			{
-			list.Remove(selected);
+			var selected = list [Random.Range (0, list.Count)];
+			var temp = sudoku [selected];
+			sudoku [selected] = -1;
+			var clone = (int[])sudoku.Clone ();
+			if (IsUnique (clone) != Solution.Unique) {
+				sudoku [selected] = temp;
+			} else {
+				list.Remove (selected);
 				deleted--;
 			}
 		}
@@ -173,7 +182,7 @@ public class MainScript : MonoBehaviour
 		for (int y=0; y<6; y++) {
 			for (int x =0; x<6; x++) {
 				var list = new List<int> (6){0,1,2,3,4,5};
-				ClearList (generated,list, x, y);
+				ClearList (generated, list, x, y);
 				if (list.Count == 0) {
 					var dy = Mathf.FloorToInt (y / 2f);
 					var clear = dy * 12;
@@ -191,7 +200,7 @@ public class MainScript : MonoBehaviour
 		return generated;
 	}
 
-	public void ClearList (int[] generated,List<int> list, int x, int y)
+	public void ClearList (int[] generated, List<int> list, int x, int y)
 	{
 		var dy = Mathf.FloorToInt (y / 2f);
 		var dx = Mathf.FloorToInt (x / 3f);
@@ -208,11 +217,12 @@ public class MainScript : MonoBehaviour
 		}
 	}
 
-	public void Sifirla(){
+	public void Sifirla ()
+	{
 		for (int i =0; i<36; i++) {
-			dices [i].Locked=false;
-			dices [i].Pinned=false;
-			dices[i]._value = -1;
+			dices [i].Locked = false;
+			dices [i].Pinned = false;
+			dices [i]._value = -1;
 		}
 	}
 
@@ -221,8 +231,8 @@ public class MainScript : MonoBehaviour
 		var istrue = ControlBoard ();
 		if (istrue) {
 			count++;
-			Sifirla();
-			SudokuGenerate();
+			Sifirla ();
+			SudokuGenerate ();
 		}
 	}
 	
@@ -259,7 +269,6 @@ public class MainScript : MonoBehaviour
 		}
 		return true;
 	}
-	
 
 	public void beginDrag ()
 	{
@@ -272,7 +281,7 @@ public class MainScript : MonoBehaviour
 
 	public void onDrag (int i)
 	{
-		if (!dices [i].Locked && !dices[i].Pinned) {
+		if (!dices [i].Locked && !dices [i].Pinned) {
 			if (!used) {
 				Vector2 pos2 = Input.mousePosition;
 				Vector2 diff = pos2 - pos;
@@ -306,33 +315,35 @@ public class MainScript : MonoBehaviour
 			}
 		}
 	}
+
 	private float tempClickTime;
 	private int previousClick = -1;
 
-	public void DoubleClick(int i)
+	public void DoubleClick (int i)
 	{
 		if (dices [i].Locked)
 			return;
-		if (previousClick == i && (Time.time - tempClickTime) < 0.2f) {
+		if (previousClick == i && (Time.time - tempClickTime) < 0.3f) {
 
-			lockClick.Play();	
+			lockClick.Play ();	
 			dices [i].Pinned = ! dices [i].Pinned;
 		} else {
-			tempClickTime=Time.time;
+			tempClickTime = Time.time;
 			previousClick = i;
 		}
 	}
 
 	void Update ()
 	{
-	 		if (Input.GetKeyDown (KeyCode.Escape))
+		if (Input.GetKeyDown (KeyCode.Escape))
 			Application.Quit ();
 	}
 
-	public void ToMinutes(int i){
+	public void ToMinutes (int i)
+	{
 		switch (i) {
 		case 0:
-			level = 22;
+			level = 16;
 			break;
 		case 1:
 			level = 24;
@@ -344,8 +355,11 @@ public class MainScript : MonoBehaviour
 		sudoku.SetActive (false);
 		levels.SetActive (false);
 		minutes.SetActive (true);
-		} 
-	public void ToSudoku(int j){
+		voice.SetActive (true);
+	}
+
+	public void ToSudoku (int j)
+	{
 		switch (j) {
 		case 0:
 			minute = 10;
@@ -362,15 +376,34 @@ public class MainScript : MonoBehaviour
 		minutes.SetActive (false);
 		zaman.SetActive (true);
 		score.SetActive (true);
+		voice.SetActive (false);
+		voice2.SetActive (true);
 
 		StartSudoku ();
-	} 
-	public void ToLevels(){
+	}
+
+	public void ToLevels ()
+	{
 		sudoku.SetActive (false);
 		levels.SetActive (true);
 		minutes.SetActive (false);
-	} 
-	public void StartSudoku(){
+		menu.SetActive (false);
+		voice.SetActive (true);	
+			
+	}
+
+	public void ToMenu ()
+	{
+		sudoku.SetActive (false);
+		levels.SetActive (false);
+		minutes.SetActive (false);
+		menu.SetActive (true);
+		voice.SetActive (true);
+
+	}
+
+	public void StartSudoku ()
+	{
 		SudokuGenerate ();
 		var ahmet = GameObject.FindObjectOfType<CountTime> ();
 		ahmet.started = true;
@@ -378,7 +411,8 @@ public class MainScript : MonoBehaviour
 
 	}
 
-	public void SudokuGenerate(){
+	public void SudokuGenerate ()
+	{
 		var generated = Genisys ();
 		var removed = RemoveNumbers (generated);
 		for (int i =0; i<36; i++) {
@@ -388,5 +422,38 @@ public class MainScript : MonoBehaviour
 			dices [i].AwakeMe ();
 		}
 		completed.Play ();
+	}
+	
+	bool sound = true;
+
+	public void SoundOpen ()
+	{
+		if (sound) {
+			AudioListener.volume = 0;
+			soundButton.image.sprite = newSprite;
+			soundButton2.image.sprite = newSprite;
+			sound = false;
+		} 
+		else 
+		{
+			AudioListener.volume = 1;
+			soundButton.image.sprite = oldSprite;
+			soundButton2.image.sprite = oldSprite;
+			sound = true;
+		}
+	}
+
+	public void KeepTime(){
+		var istrue = ControlBoard ();
+		if (istrue) {		
+			sudoku.SetActive (false);
+			levels.SetActive (false);
+			minutes.SetActive (false);
+			zaman.SetActive (false);
+			timeScore.SetActive (true);
+			float startTime = Time.deltaTime;
+			float currTime = Time.deltaTime - startTime;
+			timeText.text = string.Format ("C O M P L E T I O N  T I M E = " + currTime); 
+		}
 	}
 }

@@ -17,9 +17,7 @@ public class CountTime : MonoBehaviour
 
 	public bool started = false;
 
-	IEnumerator WaitSomeSecond(){
-		yield return new WaitForSeconds (5);
-	}
+	
 	void Update ()
 	{
 		if (started) {
