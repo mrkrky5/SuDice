@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class CountTime : MonoBehaviour
 {
 
-	Text mytext;
+	public Text mytext;
 	public float min;
 	public float second = 0.0f;
 
@@ -16,11 +16,11 @@ public class CountTime : MonoBehaviour
 	}
 
 	public bool started = false;
-
+	public bool stopped = true;
 	
 	void Update ()
 	{
-		if (started) {
+		if (started && stopped) {
 			second -= Time.deltaTime;
 			if (second < 0) {
 				min --;

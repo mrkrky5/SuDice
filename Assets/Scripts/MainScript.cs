@@ -20,24 +20,25 @@ public class MainScript : MonoBehaviour
 	public GameObject menu;
 	public GameObject voice;
 	public GameObject voice2;
-	public GameObject timeScore;
-
+	public GameObject panels;
+	public GameObject loading;
+	
 	private int minute;
 
+	public Text newText;
+	
 	public static int level;
 	public static int count;
 
 	public AudioSource lockClick;
 	public AudioSource music;
 	public AudioSource completed;
-
 	public Button soundButton;
 	public Button soundButton2;
 
 	public Sprite newSprite;
 	public Sprite oldSprite;
 
-	public Text timeText;
 
 	void Awake ()
 	{
@@ -63,8 +64,10 @@ public class MainScript : MonoBehaviour
 		voice.SetActive (true);
 		voice2 = GameObject.Find ("Voice2");
 		voice2.SetActive (false);
-		timeScore = GameObject.Find ("TimeScore");
-		timeScore.SetActive (false);
+		panels = GameObject.Find ("Panels");
+		panels.SetActive (false);
+		loading = GameObject.Find ("Loading");
+		loading.SetActive (false);
 
 	}
 
@@ -346,17 +349,20 @@ public class MainScript : MonoBehaviour
 			level = 16;
 			break;
 		case 1:
-			level = 24;
+			level = 20;
 			break;
 		case 2:
-			level = 26;
+			level = 24;
 			break;
 		}
 		sudoku.SetActive (false);
 		levels.SetActive (false);
 		minutes.SetActive (true);
 		voice.SetActive (true);
+		panels.SetActive (false);
+
 	}
+
 
 	public void ToSudoku (int j)
 	{
@@ -374,11 +380,13 @@ public class MainScript : MonoBehaviour
 		sudoku.SetActive (true);
 		levels.SetActive (false);
 		minutes.SetActive (false);
-		zaman.SetActive (true);
 		score.SetActive (true);
 		voice.SetActive (false);
 		voice2.SetActive (true);
-
+		zaman.SetActive (true);
+		panels.SetActive (true);
+			
+		StartCoroutine (WaitSeconds ());
 		StartSudoku ();
 	}
 
@@ -389,6 +397,8 @@ public class MainScript : MonoBehaviour
 		minutes.SetActive (false);
 		menu.SetActive (false);
 		voice.SetActive (true);	
+		panels.SetActive (false);
+
 			
 	}
 
@@ -399,6 +409,8 @@ public class MainScript : MonoBehaviour
 		minutes.SetActive (false);
 		menu.SetActive (true);
 		voice.SetActive (true);
+		panels.SetActive (false);
+
 
 	}
 
@@ -411,7 +423,7 @@ public class MainScript : MonoBehaviour
 
 	}
 
-	public void SudokuGenerate ()
+		public void SudokuGenerate ()
 	{
 		var generated = Genisys ();
 		var removed = RemoveNumbers (generated);
@@ -421,7 +433,6 @@ public class MainScript : MonoBehaviour
 		for (int i =0; i<36; i++) {
 			dices [i].AwakeMe ();
 		}
-		completed.Play ();
 	}
 	
 	bool sound = true;
@@ -433,9 +444,7 @@ public class MainScript : MonoBehaviour
 			soundButton.image.sprite = newSprite;
 			soundButton2.image.sprite = newSprite;
 			sound = false;
-		} 
-		else 
-		{
+		} else {
 			AudioListener.volume = 1;
 			soundButton.image.sprite = oldSprite;
 			soundButton2.image.sprite = oldSprite;
@@ -443,17 +452,25 @@ public class MainScript : MonoBehaviour
 		}
 	}
 
-	public void KeepTime(){
-		var istrue = ControlBoard ();
-		if (istrue) {		
-			sudoku.SetActive (false);
-			levels.SetActive (false);
-			minutes.SetActive (false);
-			zaman.SetActive (false);
-			timeScore.SetActive (true);
-			float startTime = Time.deltaTime;
-			float currTime = Time.deltaTime - startTime;
-			timeText.text = string.Format ("C O M P L E T I O N  T I M E = " + currTime); 
-		}
+	public void NextSudoku(){
+
+		panels.SetActive (false);
+		sudoku.SetActive (false);
+	}
+
+	IEnumerator WaitSeconds(){
+		NextSudoku ();
+		var eray = GameObject.FindObjectOfType<CountTime> ();
+		eray.stopped = false;
+		eray.mytext = newText;
+		newText.text = string.Format ("R E M A I N I N G  T I M E = " + ((int)eray.min).ToIntString (2) + " : " + ((int)eray.second).ToIntString (2));
+		yield return new WaitForSeconds(3);
+		panels.SetActive (true);
+		sudoku.SetActive (true);
+		var banu = GameObject.FindObjectOfType<CountTime> ();
+		completed.Play ();
+		banu.stopped = true;
+		newText = banu.mytext;
+		banu.mytext.text = string.Format ("T I M E = " + ((int)banu.min).ToIntString (2) + " : " + ((int)banu.second).ToIntString (2));
 	}
 }
