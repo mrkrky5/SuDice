@@ -22,10 +22,11 @@ public class MainScript : MonoBehaviour
 	public GameObject voice2;
 	public GameObject panels;
 	public GameObject loading;
-	
+
 	private int minute;
 
 	public Text newText;
+	public Text levelText;
 	
 	public static int level;
 	public static int count;
@@ -35,6 +36,7 @@ public class MainScript : MonoBehaviour
 	public AudioSource completed;
 	public Button soundButton;
 	public Button soundButton2;
+	public AudioSource achievement;
 
 	public Sprite newSprite;
 	public Sprite oldSprite;
@@ -68,6 +70,7 @@ public class MainScript : MonoBehaviour
 		panels.SetActive (false);
 		loading = GameObject.Find ("Loading");
 		loading.SetActive (false);
+	
 
 	}
 
@@ -346,15 +349,17 @@ public class MainScript : MonoBehaviour
 	{
 		switch (i) {
 		case 0:
-			level = 16;
+			level = 18;
 			break;
 		case 1:
-			level = 20;
+			level = 21;
 			break;
 		case 2:
-			level = 24;
+			level = 25;
 			break;
+
 		}
+
 		sudoku.SetActive (false);
 		levels.SetActive (false);
 		minutes.SetActive (true);
@@ -380,14 +385,13 @@ public class MainScript : MonoBehaviour
 		sudoku.SetActive (true);
 		levels.SetActive (false);
 		minutes.SetActive (false);
-		score.SetActive (true);
 		voice.SetActive (false);
 		voice2.SetActive (true);
 		zaman.SetActive (true);
 		panels.SetActive (true);
-			
-		StartCoroutine (WaitSeconds ());
+
 		StartSudoku ();
+		achievement.volume = 0;
 	}
 
 	public void ToLevels ()
@@ -433,6 +437,8 @@ public class MainScript : MonoBehaviour
 		for (int i =0; i<36; i++) {
 			dices [i].AwakeMe ();
 		}
+		StartCoroutine (WaitSeconds ());
+
 	}
 	
 	bool sound = true;
@@ -456,6 +462,9 @@ public class MainScript : MonoBehaviour
 
 		panels.SetActive (false);
 		sudoku.SetActive (false);
+		score.SetActive (false);
+		loading.SetActive (true);
+
 	}
 
 	IEnumerator WaitSeconds(){
@@ -464,9 +473,13 @@ public class MainScript : MonoBehaviour
 		eray.stopped = false;
 		eray.mytext = newText;
 		newText.text = string.Format ("R E M A I N I N G  T I M E = " + ((int)eray.min).ToIntString (2) + " : " + ((int)eray.second).ToIntString (2));
+		achievement.volume = 0.2f;	
+		achievement.Play();
 		yield return new WaitForSeconds(3);
-		panels.SetActive (true);
+		panels.SetActive (true); 
 		sudoku.SetActive (true);
+		score.SetActive (true);
+		loading.SetActive (false);
 		var banu = GameObject.FindObjectOfType<CountTime> ();
 		completed.Play ();
 		banu.stopped = true;
