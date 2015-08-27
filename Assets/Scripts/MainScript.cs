@@ -22,25 +22,31 @@ public class MainScript : MonoBehaviour
 	public GameObject voice2;
 	public GameObject panels;
 	public GameObject loading;
+	public GameObject backButton3;
+	public GameObject tutorialText;
+	public GameObject EasyLevelText;
+	public GameObject MediumLevelText;
+	public GameObject HardLevelText;
+
 
 	private int minute;
 
 	public Text newText;
-	public Text levelText;
-	
+
 	public static int level;
 	public static int count;
 
 	public AudioSource lockClick;
 	public AudioSource music;
 	public AudioSource completed;
+	public AudioSource achievement;
+
+
 	public Button soundButton;
 	public Button soundButton2;
-	public AudioSource achievement;
 
 	public Sprite newSprite;
 	public Sprite oldSprite;
-
 
 	void Awake ()
 	{
@@ -70,8 +76,16 @@ public class MainScript : MonoBehaviour
 		panels.SetActive (false);
 		loading = GameObject.Find ("Loading");
 		loading.SetActive (false);
-	
-
+		backButton3 = GameObject.Find ("BackButton3");
+		backButton3.SetActive (false);
+		tutorialText = GameObject.Find ("TutorialText");
+		tutorialText.SetActive (false);
+		EasyLevelText = GameObject.Find ("EasyLevelText");
+		EasyLevelText.SetActive (false);
+		MediumLevelText = GameObject.Find ("MediumLevelText");
+		MediumLevelText.SetActive (false);
+		HardLevelText = GameObject.Find ("HardLevelText");
+		HardLevelText.SetActive (false);
 	}
 
 	public enum Solution
@@ -355,7 +369,7 @@ public class MainScript : MonoBehaviour
 			level = 21;
 			break;
 		case 2:
-			level = 25;
+			level = 24;
 			break;
 
 		}
@@ -367,7 +381,6 @@ public class MainScript : MonoBehaviour
 		panels.SetActive (false);
 
 	}
-
 
 	public void ToSudoku (int j)
 	{
@@ -414,7 +427,21 @@ public class MainScript : MonoBehaviour
 		menu.SetActive (true);
 		voice.SetActive (true);
 		panels.SetActive (false);
+		backButton3.SetActive (false);
+		tutorialText.SetActive (false);
 
+	}
+
+	public void ToHowToPlay ()
+	{
+		sudoku.SetActive (false);
+		levels.SetActive (false);
+		minutes.SetActive (false);
+		menu.SetActive (false);
+		voice.SetActive (true);	
+		panels.SetActive (false);
+		backButton3.SetActive (true);
+		tutorialText.SetActive (true);
 
 	}
 
@@ -427,7 +454,7 @@ public class MainScript : MonoBehaviour
 
 	}
 
-		public void SudokuGenerate ()
+	public void SudokuGenerate ()
 	{
 		var generated = Genisys ();
 		var removed = RemoveNumbers (generated);
@@ -458,7 +485,8 @@ public class MainScript : MonoBehaviour
 		}
 	}
 
-	public void NextSudoku(){
+	public void NextSudoku ()
+	{
 
 		panels.SetActive (false);
 		sudoku.SetActive (false);
@@ -467,18 +495,20 @@ public class MainScript : MonoBehaviour
 
 	}
 
-	IEnumerator WaitSeconds(){
+	IEnumerator WaitSeconds ()
+	{
 		NextSudoku ();
 		var eray = GameObject.FindObjectOfType<CountTime> ();
 		eray.stopped = false;
 		eray.mytext = newText;
 		newText.text = string.Format ("R E M A I N I N G  T I M E = " + ((int)eray.min).ToIntString (2) + " : " + ((int)eray.second).ToIntString (2));
 		achievement.volume = 0.2f;	
-		achievement.Play();
-		yield return new WaitForSeconds(3);
+		achievement.Play ();
+		yield return new WaitForSeconds (3);
 		panels.SetActive (true); 
 		sudoku.SetActive (true);
 		score.SetActive (true);
+		LevelTextAppears ();
 		loading.SetActive (false);
 		var banu = GameObject.FindObjectOfType<CountTime> ();
 		completed.Play ();
@@ -486,4 +516,17 @@ public class MainScript : MonoBehaviour
 		newText = banu.mytext;
 		banu.mytext.text = string.Format ("T I M E = " + ((int)banu.min).ToIntString (2) + " : " + ((int)banu.second).ToIntString (2));
 	}
+
+	public void LevelTextAppears(){
+		if (level == 18) {
+			EasyLevelText.SetActive (true);
+		}
+		if (level == 21) {
+			MediumLevelText.SetActive (true);
+		}
+		if (level == 24){
+			HardLevelText.SetActive (true);
+		}
+	}
+	
 }

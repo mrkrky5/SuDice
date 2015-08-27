@@ -8,7 +8,7 @@ public class CountTime : MonoBehaviour
 	public Text mytext;
 	public float min;
 	public float second = 0.0f;
-
+	
 
 	void Start ()
 	{
@@ -40,4 +40,5 @@ public class CountTime : MonoBehaviour
 			}
 		}
 	}
+	
 }

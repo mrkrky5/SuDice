@@ -87,7 +87,6 @@ public class Dice : MonoBehaviour {
 		MainScript.Instance.CheckBoard ();
 	}
 
-	// Use this for initialization
 	 public void AwakeMe(){
 		rend = GetComponent<MeshRenderer> ();
 		if (Value == -1) {
