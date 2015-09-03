@@ -2,6 +2,9 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
+using GooglePlayGames.BasicApi;
 
 public class MainScript : MonoBehaviour
 {
@@ -9,6 +12,7 @@ public class MainScript : MonoBehaviour
 	public Dice[] dices = new Dice[36] ;
 	public Vector2 pos;
 	public Texture[] textures;
+
 	public static MainScript Instance;
 
 	public GameObject sudoku;
@@ -27,37 +31,42 @@ public class MainScript : MonoBehaviour
 	public GameObject EasyLevelText;
 	public GameObject MediumLevelText;
 	public GameObject HardLevelText;
+	public GameObject leaderBoard;
+	public GameObject achievements;
+	public GameObject login;
 
 	public float startTime;
 	public float finishTime;
 	public static float passingTime;
 	private int minute;
-
 	public Text newText;
-
 	public int levelPoint1;
 	public int passTime1;
 	public static int total;
-
 	public static int level;
-	public int count = 0;
+	public int count;
 
+	public int selectedLevel = 0;
+	public int selectedMinute = 0;
 	public AudioSource lockClick;
 	public AudioSource music;
 	public AudioSource completed;
 	public AudioSource achievement;
-
-
 	public Button soundButton;
 	public Button soundButton2;
-
 	public Sprite newSprite;
 	public Sprite oldSprite;
+	public string[,] leaderBoardsID = new string[3, 3]{
+		{"CgkIzv3U6eAFEAIQAA","CgkIzv3U6eAFEAIQAQ","CgkIzv3U6eAFEAIQAg"},
+		{"CgkIzv3U6eAFEAIQAw","CgkIzv3U6eAFEAIQBA","CgkIzv3U6eAFEAIQBQ"},
+		{"CgkIzv3U6eAFEAIQBg","CgkIzv3U6eAFEAIQBw","CgkIzv3U6eAFEAIQCA"}
+	};
 
 	void Awake ()
 	{
 		Instance = this;
 		music = gameObject.GetComponent<AudioSource> ();
+		count = 0;
 
 		menu = GameObject.Find ("MainMenu");
 		menu.SetActive (true);
@@ -91,6 +100,51 @@ public class MainScript : MonoBehaviour
 		MediumLevelText.SetActive (false);
 		HardLevelText = GameObject.Find ("HardLevelText");
 		HardLevelText.SetActive (false);
+		leaderBoard = GameObject.Find ("LeaderBoard");
+		leaderBoard.SetActive (false);
+		achievements = GameObject.Find ("Achievements");
+		achievements.SetActive (false);
+		login = GameObject.Find ("Login");
+
+		PlayGamesPlatform.Activate ();
+		if (Social.localUser.authenticated) {
+			leaderBoard.SetActive (true);
+			achievements.SetActive (true);
+			login.SetActive (false);
+		}
+	}
+
+	void Start ()
+	{
+		AchievementScript.Instance.Add ("Newbie", "CgkIzv3U6eAFEAIQDQ", 1);
+		AchievementScript.Instance.Add ("Veteran", "CgkIzv3U6eAFEAIQDg", 20);
+		AchievementScript.Instance.Add ("Master", "CgkIzv3U6eAFEAIQDw", 50);
+		AchievementScript.Instance.Add ("Itself", "CgkIzv3U6eAFEAIQEA", 150);
+
+		AchievementScript.Instance.Add ("EasyFast", "CgkIzv3U6eAFEAIQCg", 1);
+		AchievementScript.Instance.Add ("MediumFast", "CgkIzv3U6eAFEAIQCw", 1);
+		AchievementScript.Instance.Add ("HardFast", "CgkIzv3U6eAFEAIQDA", 1);
+
+		AchievementScript.Instance.Add ("Easy10", "CgkIzv3U6eAFEAIQEQ", 1);
+		AchievementScript.Instance.Add ("Easy20", "CgkIzv3U6eAFEAIQEg", 1);
+		AchievementScript.Instance.Add ("Easy30", "CgkIzv3U6eAFEAIQEw", 1);
+
+		AchievementScript.Instance.Add ("Medium10", "CgkIzv3U6eAFEAIQFA", 1);
+		AchievementScript.Instance.Add ("Medium20", "CgkIzv3U6eAFEAIQFQ", 1);
+		AchievementScript.Instance.Add ("Medium30", "CgkIzv3U6eAFEAIQFg", 1);
+
+		AchievementScript.Instance.Add ("Hard10", "CgkIzv3U6eAFEAIQFw", 1);
+		AchievementScript.Instance.Add ("Hard20", "CgkIzv3U6eAFEAIQGA", 1);
+		AchievementScript.Instance.Add ("Hard30", "CgkIzv3U6eAFEAIQGQ", 1);
+
+	}
+	
+	void Update ()
+	{
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			Application.Quit ();
+		}
+		passingTime = finishTime - startTime;
 	}
 
 	public enum Solution
@@ -357,16 +411,9 @@ public class MainScript : MonoBehaviour
 		}
 	}
 
-	void Update ()
-	{
-		if (Input.GetKeyDown (KeyCode.Escape)) {
-			Application.Quit ();
-		}
-		passingTime = finishTime - startTime;
-	}
-
 	public void ToMinutes (int i)
 	{
+		selectedLevel = i;
 		switch (i) {
 		case 0:
 			level = 18;
@@ -390,6 +437,7 @@ public class MainScript : MonoBehaviour
 
 	public void ToSudoku (int j)
 	{
+		selectedMinute = j;
 		switch (j) {
 		case 0:
 			minute = 10;
@@ -416,7 +464,6 @@ public class MainScript : MonoBehaviour
 
 	}
 
-
 	public void ToLevels ()
 	{
 		sudoku.SetActive (false);
@@ -425,8 +472,9 @@ public class MainScript : MonoBehaviour
 		menu.SetActive (false);
 		voice.SetActive (true);	
 		panels.SetActive (false);
+		login.SetActive (false);
 
-			
+		
 	}
 
 	public void ToMenu ()
@@ -439,6 +487,8 @@ public class MainScript : MonoBehaviour
 		panels.SetActive (false);
 		backButton3.SetActive (false);
 		tutorialText.SetActive (false);
+		leaderBoard.SetActive (false);
+		login.SetActive (true);
 
 	}
 
@@ -452,12 +502,15 @@ public class MainScript : MonoBehaviour
 		panels.SetActive (false);
 		backButton3.SetActive (true);
 		tutorialText.SetActive (true);
+		login.SetActive (false);
 
 	}
 
-	public void FromEndToMenu(){
+	public void FromEndToMenu ()
+	{
 
 		Application.LoadLevel ("MainScene");
+		leaderBoard.SetActive (false);
 	}
 
 	public void StartSudoku ()
@@ -523,6 +576,21 @@ public class MainScript : MonoBehaviour
 		achievement.volume = 0.2f;	
 		achievement.Play ();
 		finishTime = Time.time;
+		if (count > 0) {
+			AchievementScript.Instance.SetAchievement ("Newbie", 1);
+			AchievementScript.Instance.SetAchievement ("Veteran", AchievementScript.Instance.GetProgress ("Veteran") + 1);
+			AchievementScript.Instance.SetAchievement ("Master", AchievementScript.Instance.GetProgress ("Master") + 1);
+			AchievementScript.Instance.SetAchievement ("Itself", AchievementScript.Instance.GetProgress ("Itself") + 1);
+			if (passingTime <= 60) {
+				if (selectedLevel == 0) {
+					AchievementScript.Instance.SetAchievement ("EasyFast", 1);
+				} else if (selectedLevel == 1) {
+					AchievementScript.Instance.SetAchievement ("MediumFast", 1);
+				} else {
+					AchievementScript.Instance.SetAchievement ("HardFast", 1);
+				}
+			}
+		}
 		yield return new WaitForSeconds (2);
 		panels.SetActive (true); 
 		sudoku.SetActive (true);
@@ -537,17 +605,19 @@ public class MainScript : MonoBehaviour
 		banu.mytext.text = string.Format ("T I M E = " + ((int)banu.min).ToIntString (2) + " : " + ((int)banu.second).ToIntString (2));
 	}
 
-	public void LevelTextAppears(){
+	public void LevelTextAppears ()
+	{
 		if (level == 18) {
 			EasyLevelText.SetActive (true);
 		}
 		if (level == 22) {
 			MediumLevelText.SetActive (true);
 		}
-		if (level == 24){
+		if (level == 24) {
 			HardLevelText.SetActive (true);
 		}
 	}
+
 	public void CalculatePoints ()
 	{
 		if (level == 18) {
@@ -576,5 +646,51 @@ public class MainScript : MonoBehaviour
 		var ek = GetComponent<Score> ();
 		ek.NewFunction (total);
 		count++;
+	}
+
+	public void LogIn ()
+	{
+		PlayGamesPlatform.DebugLogEnabled = true;
+		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder ().Build ();
+		PlayGamesPlatform.InitializeInstance (config);
+		((PlayGamesPlatform)Social.Active).SetDefaultLeaderboardForUI (leaderBoardsID [0, 0]);
+		Social.localUser.Authenticate ((bool success) =>
+		{
+			if (success) {
+				Debug.Log ("Login Sucess");
+				leaderBoard.SetActive (true);
+				achievements.SetActive (true);
+				login.SetActive(false);
+			} else {
+				Debug.Log ("Login failed");
+			}
+		});
+
+	}
+
+	public void OnShowLeaderBoard ()
+	{
+		Social.ShowLeaderboardUI ();
+	}
+
+	public void OnAddScoreToLeaderBoard ()
+	{
+		if (Social.localUser.authenticated) {
+			Social.ReportScore (total, leaderBoardsID [selectedLevel, selectedMinute], (bool success) =>
+			{
+				if (success) {
+					((PlayGamesPlatform)Social.Active).ShowLeaderboardUI (leaderBoardsID [selectedLevel, selectedMinute]);
+				} else {
+					Debug.Log ("Add Score Fail");
+				}
+			});
+		}
+	}
+
+	public void OnShowAchievements ()
+	{
+		if (Social.localUser.authenticated) {
+			Social.ShowAchievementsUI ();
+		}
 	}
 }

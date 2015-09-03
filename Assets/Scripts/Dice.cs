@@ -34,8 +34,8 @@ public class Dice : MonoBehaviour {
 		set{
 			locked=value;
 			if(value){
-				rend.materials[4].color=new Color(0.5f,0.6f,0.7f);
-				rend.materials[0].color=new Color(0.5f,0.6f,0.7f);
+				rend.materials[4].color=new Color(0.1f,0.3f,0.5f);
+				rend.materials[0].color=new Color(0.1f,0.3f,0.5f);
 			}
 			else{
 				rend.materials[4].color=new Color (1,1,1);
@@ -50,8 +50,8 @@ public class Dice : MonoBehaviour {
 			pinned=value;
 			if(value)
 			{
-				rend.materials[4].color=new Color(1f,0.3f,0f);
-				rend.materials[0].color=new Color(1f,0.3f,0f);
+				rend.materials[4].color=new Color(0.3f,0.58f,0.68f);
+				rend.materials[0].color=new Color(0.3f,0.58f,0.68f);
 			}			
 			else
 			{
