@@ -12,7 +12,8 @@ public class AchievementScript : MonoBehaviour
 		achievements [ID].progress = progress;
 		if (!achievements [ID].completed) {
 			Social.ReportProgress (achievements [ID].achievementID, GetPercentage (ID), b => {});
-			achievements [ID].completed = true;
+			if(achievements[ID].percentage>=100)
+				achievements [ID].completed = true;
 		}
 	}
 

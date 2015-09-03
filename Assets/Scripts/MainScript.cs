@@ -460,7 +460,6 @@ public class MainScript : MonoBehaviour
 		StartSudoku ();
 		achievement.volume = 0;
 
-		startTime = Time.time;
 
 	}
 
@@ -581,6 +580,7 @@ public class MainScript : MonoBehaviour
 			AchievementScript.Instance.SetAchievement ("Veteran", AchievementScript.Instance.GetProgress ("Veteran") + 1);
 			AchievementScript.Instance.SetAchievement ("Master", AchievementScript.Instance.GetProgress ("Master") + 1);
 			AchievementScript.Instance.SetAchievement ("Itself", AchievementScript.Instance.GetProgress ("Itself") + 1);
+			passingTime = finishTime-startTime;
 			if (passingTime <= 60) {
 				if (selectedLevel == 0) {
 					AchievementScript.Instance.SetAchievement ("EasyFast", 1);
@@ -592,6 +592,8 @@ public class MainScript : MonoBehaviour
 			}
 		}
 		yield return new WaitForSeconds (2);
+		
+		startTime = Time.time;
 		panels.SetActive (true); 
 		sudoku.SetActive (true);
 		score.SetActive (true);
