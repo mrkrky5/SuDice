@@ -12,9 +12,7 @@ public class MainScript : MonoBehaviour
 	public Dice[] dices = new Dice[36] ;
 	public Vector2 pos;
 	public Texture[] textures;
-
 	public static MainScript Instance;
-
 	public GameObject sudoku;
 	public GameObject levels;
 	public GameObject minutes;
@@ -33,7 +31,10 @@ public class MainScript : MonoBehaviour
 	public GameObject HardLevelText;
 	public GameObject leaderBoard;
 	public GameObject achievements;
-	public GameObject login;
+	public GameObject leaderboardLevels;
+	public GameObject easyBoards; 
+	public GameObject mediumBoards; 
+	public GameObject hardBoards; 
 
 	public float startTime;
 	public float finishTime;
@@ -44,8 +45,7 @@ public class MainScript : MonoBehaviour
 	public int passTime1;
 	public static int total;
 	public static int level;
-	public int count;
-
+	public int count = -1;
 	public int selectedLevel = 0;
 	public int selectedMinute = 0;
 	public AudioSource lockClick;
@@ -64,54 +64,81 @@ public class MainScript : MonoBehaviour
 
 	void Awake ()
 	{
+
 		Instance = this;
 		music = gameObject.GetComponent<AudioSource> ();
-		count = 0;
 
 		menu = GameObject.Find ("MainMenu");
 		menu.SetActive (true);
+
 		sudoku = GameObject.Find ("Sudoku");
 		sudoku.SetActive (false);
+
 		levels = GameObject.Find ("EasyMediumHard");
 		levels.SetActive (false);
+
 		minutes = GameObject.Find ("Minutes");
 		minutes.SetActive (false);
+
 		zaman = GameObject.Find ("Zaman");
 		zaman.SetActive (false);
+
 		theEnd = GameObject.Find ("TheEnd");
 		theEnd.SetActive (false);
+
 		score = GameObject.Find ("Score");
 		score.SetActive (false);
+
 		voice = GameObject.Find ("Voice");
 		voice.SetActive (true);
+
 		voice2 = GameObject.Find ("Voice2");
 		voice2.SetActive (false);
+
 		panels = GameObject.Find ("Panels");
 		panels.SetActive (false);
+
 		loading = GameObject.Find ("Loading");
 		loading.SetActive (false);
+
 		backButton3 = GameObject.Find ("BackButton3");
 		backButton3.SetActive (false);
+
 		tutorialText = GameObject.Find ("TutorialText");
 		tutorialText.SetActive (false);
+
 		EasyLevelText = GameObject.Find ("EasyLevelText");
 		EasyLevelText.SetActive (false);
+
 		MediumLevelText = GameObject.Find ("MediumLevelText");
 		MediumLevelText.SetActive (false);
+
 		HardLevelText = GameObject.Find ("HardLevelText");
 		HardLevelText.SetActive (false);
+
 		leaderBoard = GameObject.Find ("LeaderBoard");
-		leaderBoard.SetActive (false);
 		achievements = GameObject.Find ("Achievements");
 		achievements.SetActive (false);
-		login = GameObject.Find ("Login");
+
+		leaderboardLevels = GameObject.Find ("LeaderboardLevels");
+		leaderboardLevels.SetActive (false);
+
+		easyBoards = GameObject.Find ("EasyLeaderboardLevels");
+		easyBoards.SetActive (false);
+
+		mediumBoards = GameObject.Find ("MediumLeaderboardLevels");
+ 		mediumBoards.SetActive (false);
+
+		hardBoards = GameObject.Find ("HardLeaderboardLevels");
+		hardBoards.SetActive (false);
+
 
 		PlayGamesPlatform.Activate ();
 		if (Social.localUser.authenticated) {
 			leaderBoard.SetActive (true);
 			achievements.SetActive (true);
-			login.SetActive (false);
 		}
+
 	}
 
 	void Start ()
@@ -137,6 +164,9 @@ public class MainScript : MonoBehaviour
 		AchievementScript.Instance.Add ("Hard20", "CgkIzv3U6eAFEAIQGA", 1);
 		AchievementScript.Instance.Add ("Hard30", "CgkIzv3U6eAFEAIQGQ", 1);
 
+		AchievementScript.Instance.Add ("RealMaster", "CgkIzv3U6eAFEAIQGg", 16);
+
+		StartCoroutine (WaitTwoSeconds ());
 	}
 	
 	void Update ()
@@ -145,6 +175,14 @@ public class MainScript : MonoBehaviour
 			Application.Quit ();
 		}
 		passingTime = finishTime - startTime;
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			Application.LoadLevel ("MainScene");
+		}
+	}
+	IEnumerator WaitTwoSeconds(){
+	
+		yield return new WaitForSeconds (2);
+		LogIn ();
 	}
 
 	public enum Solution
@@ -460,7 +498,6 @@ public class MainScript : MonoBehaviour
 		StartSudoku ();
 		achievement.volume = 0;
 
-
 	}
 
 	public void ToLevels ()
@@ -471,8 +508,7 @@ public class MainScript : MonoBehaviour
 		menu.SetActive (false);
 		voice.SetActive (true);	
 		panels.SetActive (false);
-		login.SetActive (false);
-
+		leaderBoard.SetActive (false);
 		
 	}
 
@@ -486,8 +522,8 @@ public class MainScript : MonoBehaviour
 		panels.SetActive (false);
 		backButton3.SetActive (false);
 		tutorialText.SetActive (false);
-		leaderBoard.SetActive (false);
-		login.SetActive (true);
+		leaderboardLevels.SetActive (false);
+		leaderBoard.SetActive (true);
 
 	}
 
@@ -501,24 +537,50 @@ public class MainScript : MonoBehaviour
 		panels.SetActive (false);
 		backButton3.SetActive (true);
 		tutorialText.SetActive (true);
-		login.SetActive (false);
+		leaderBoard.SetActive (false);
+	}
 
+	public void ToLeaderboards(){
+
+		leaderboardLevels.SetActive (true);
+		menu.SetActive (false);
+		leaderBoard.SetActive (false);
+		easyBoards.SetActive (false);
+		mediumBoards.SetActive (false);
+		hardBoards.SetActive (false);
+
+	}
+
+	public void ToEasyBoards(){
+		selectedLevel = 0;
+		easyBoards.SetActive (true);
+		leaderboardLevels.SetActive (false);
+	}
+	public void ToMediumBoards(){
+		selectedLevel = 1;
+		mediumBoards.SetActive (true);
+		leaderboardLevels.SetActive (false);
+	}
+	public void ToHardBoards(){
+		selectedLevel = 2;
+		hardBoards.SetActive (true);
+		leaderboardLevels.SetActive (false);
 	}
 
 	public void FromEndToMenu ()
 	{
 
 		Application.LoadLevel ("MainScene");
-		leaderBoard.SetActive (false);
 	}
 
 	public void StartSudoku ()
 	{
+		count = -1;
 		SudokuGenerate ();
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 		var ahmet = GameObject.FindObjectOfType<CountTime> ();
 		ahmet.started = true;
 		ahmet.min = minute;
-
 	}
 
 	public void SudokuGenerate ()
@@ -567,7 +629,9 @@ public class MainScript : MonoBehaviour
 
 	IEnumerator WaitSeconds ()
 	{
-		NextSudoku ();	
+		count++;
+		Debug.Log (count);
+		NextSudoku ();
 		var eray = GameObject.FindObjectOfType<CountTime> ();
 		eray.stopped = false;
 		eray.mytext = newText;
@@ -576,11 +640,12 @@ public class MainScript : MonoBehaviour
 		achievement.Play ();
 		finishTime = Time.time;
 		if (count > 0) {
+			CalculatePoints ();
 			AchievementScript.Instance.SetAchievement ("Newbie", 1);
 			AchievementScript.Instance.SetAchievement ("Veteran", AchievementScript.Instance.GetProgress ("Veteran") + 1);
 			AchievementScript.Instance.SetAchievement ("Master", AchievementScript.Instance.GetProgress ("Master") + 1);
 			AchievementScript.Instance.SetAchievement ("Itself", AchievementScript.Instance.GetProgress ("Itself") + 1);
-			passingTime = finishTime-startTime;
+			passingTime = finishTime - startTime;
 			if (passingTime <= 60) {
 				if (selectedLevel == 0) {
 					AchievementScript.Instance.SetAchievement ("EasyFast", 1);
@@ -598,7 +663,6 @@ public class MainScript : MonoBehaviour
 		sudoku.SetActive (true);
 		score.SetActive (true);
 		LevelTextAppears ();
-		CalculatePoints ();
 		loading.SetActive (false);
 		var banu = GameObject.FindObjectOfType<CountTime> ();
 		completed.Play ();
@@ -622,32 +686,36 @@ public class MainScript : MonoBehaviour
 
 	public void CalculatePoints ()
 	{
+		passingTime = Time.time - startTime;
 		if (level == 18) {
-			levelPoint1 = 1;
 			passTime1 = 90 - (int)passingTime;
 			if (passTime1 < 0) {
 				passTime1 = 0;
 			}
 		}
 		if (level == 22) {
-			levelPoint1 = 2;
 			passTime1 = 150 - (int)passingTime;
 			if (passTime1 < 0) {
 				passTime1 = 0;
 			}
 		}
 		if (level == 24) {
-			levelPoint1 = 3;
 			passTime1 = 210 - (int)passingTime;
 			if (passTime1 < 0) {
 				passTime1 = 0;
 			}
 		}
-		var total2 = ((10 + passTime1) * (levelPoint1 * count));
+		var total2 = ((10 + passTime1) * ((selectedLevel+1) * count));
+		Debug.Log ("Selected level =" + selectedLevel);
+		Debug.Log ("Passing time = " + passingTime);
+		Debug.Log ("Pass Time 1 =" + passTime1);
+		Debug.Log ("Total =" + total);
+		Debug.Log ("Total 2 =" + total2);
+
 		total += total2; 
 		var ek = GetComponent<Score> ();
 		ek.NewFunction (total);
-		count++;
+
 	}
 
 	public void LogIn ()
@@ -660,9 +728,7 @@ public class MainScript : MonoBehaviour
 		{
 			if (success) {
 				Debug.Log ("Login Sucess");
-				leaderBoard.SetActive (true);
 				achievements.SetActive (true);
-				login.SetActive(false);
 			} else {
 				Debug.Log ("Login failed");
 			}
@@ -670,9 +736,10 @@ public class MainScript : MonoBehaviour
 
 	}
 
-	public void OnShowLeaderBoard ()
+	public void OnShowLeaderBoard (int a)
 	{
-		Social.ShowLeaderboardUI ();
+		selectedMinute = a;
+		((PlayGamesPlatform)Social.Active).ShowLeaderboardUI (leaderBoardsID [selectedLevel, selectedMinute]);
 	}
 
 	public void OnAddScoreToLeaderBoard ()
@@ -680,9 +747,7 @@ public class MainScript : MonoBehaviour
 		if (Social.localUser.authenticated) {
 			Social.ReportScore (total, leaderBoardsID [selectedLevel, selectedMinute], (bool success) =>
 			{
-				if (success) {
-					((PlayGamesPlatform)Social.Active).ShowLeaderboardUI (leaderBoardsID [selectedLevel, selectedMinute]);
-				} else {
+				if (!success) {
 					Debug.Log ("Add Score Fail");
 				}
 			});

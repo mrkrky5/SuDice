@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class CountTime : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class CountTime : MonoBehaviour
 	public Text mytext;
 	public float min;
 	public float second = 0.0f;
-
+	
 	void Start ()
 	{
 		mytext = GetComponent<Text> ();
@@ -19,6 +20,8 @@ public class CountTime : MonoBehaviour
 	
 	void Update ()
 	{
+		var emre = GameObject.FindObjectOfType<MainScript> ();
+		var oha = emre.selectedLevel *3 + emre.selectedMinute;
 		if (started && stopped) {
 			second -= Time.deltaTime;
 			if (second < 0) {
@@ -27,8 +30,7 @@ public class CountTime : MonoBehaviour
 			}
 			mytext.text = string.Format ("T I M E = " + ((int)min).ToIntString (2) + " : " + ((int)second).ToIntString (2));
 			if (min < 0) {
-				var emre = GameObject.FindObjectOfType<MainScript> ();
-				var oha = emre.selectedLevel *3 + emre.selectedMinute;
+
 				switch(oha)
 				{
 				case 0:
@@ -100,5 +102,4 @@ public class CountTime : MonoBehaviour
 			}
 		}
 	}
-	
 }

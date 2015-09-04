@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
-Project("{52EA920D-6C81-0C61-466E-E9EEC150E233}") = "Sudice", "Assembly-CSharp-vs.csproj", "{E24D2973-DBDF-72F5-2235-58BC212829F1}"
+Project("{CDFD7B81-EF40-F05F-2D21-EE9285DB419E}") = "SuDice", "Assembly-CSharp-vs.csproj", "{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}"
 EndProject
-Project("{52EA920D-6C81-0C61-466E-E9EEC150E233}") = "Sudice", "Assembly-CSharp-Editor-vs.csproj", "{9A6E3E26-B6FE-082A-498D-BF87BC4DD3CB}"
+Project("{CDFD7B81-EF40-F05F-2D21-EE9285DB419E}") = "SuDice", "Assembly-CSharp-Editor-vs.csproj", "{62233271-FA67-58D0-29ED-2DAB507023A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,19 +11,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E24D2973-DBDF-72F5-2235-58BC212829F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E24D2973-DBDF-72F5-2235-58BC212829F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E24D2973-DBDF-72F5-2235-58BC212829F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E24D2973-DBDF-72F5-2235-58BC212829F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A6E3E26-B6FE-082A-498D-BF87BC4DD3CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A6E3E26-B6FE-082A-498D-BF87BC4DD3CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A6E3E26-B6FE-082A-498D-BF87BC4DD3CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A6E3E26-B6FE-082A-498D-BF87BC4DD3CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62233271-FA67-58D0-29ED-2DAB507023A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62233271-FA67-58D0-29ED-2DAB507023A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62233271-FA67-58D0-29ED-2DAB507023A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62233271-FA67-58D0-29ED-2DAB507023A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																																																																																																				GlobalSection(MonoDevelopProperties) = preSolution
+																																																																																																																																								GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

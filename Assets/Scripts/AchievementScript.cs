@@ -13,7 +13,10 @@ public class AchievementScript : MonoBehaviour
 		if (!achievements [ID].completed) {
 			Social.ReportProgress (achievements [ID].achievementID, GetPercentage (ID), b => {});
 			if(achievements[ID].percentage>=100)
+			{
 				achievements [ID].completed = true;
+				AchievementScript.Instance.SetAchievement ("RealMaster", this.GetProgress("RealMaster")+1);
+			}
 		}
 	}
 
