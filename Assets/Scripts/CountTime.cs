@@ -7,6 +7,7 @@ public class CountTime : MonoBehaviour
 {
 
 	public Text mytext;
+	public Text mytext2;
 	public float min;
 	public float second = 0.0f;
 	
@@ -99,6 +100,7 @@ public class CountTime : MonoBehaviour
 				emre.MediumLevelText.SetActive (false);
 				emre.music.Stop ();
 				emre.OnAddScoreToLeaderBoard ();
+				emre.myRectTransform.anchoredPosition = new Vector2(370,370);
 			}
 		}
 	}

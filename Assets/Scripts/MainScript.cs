@@ -35,6 +35,10 @@ public class MainScript : MonoBehaviour
 	public GameObject easyBoards; 
 	public GameObject mediumBoards; 
 	public GameObject hardBoards; 
+	public GameObject login;
+	public GameObject logout;
+
+	public RectTransform myRectTransform;
 
 	public float startTime;
 	public float finishTime;
@@ -61,6 +65,9 @@ public class MainScript : MonoBehaviour
 		{"CgkIzv3U6eAFEAIQAw","CgkIzv3U6eAFEAIQBA","CgkIzv3U6eAFEAIQBQ"},
 		{"CgkIzv3U6eAFEAIQBg","CgkIzv3U6eAFEAIQBw","CgkIzv3U6eAFEAIQCA"}
 	};
+
+	public int b;
+
 
 	void Awake ()
 	{
@@ -132,17 +139,23 @@ public class MainScript : MonoBehaviour
 		hardBoards = GameObject.Find ("HardLeaderboardLevels");
 		hardBoards.SetActive (false);
 
+		login = GameObject.Find ("Login");
+		login.SetActive (false);
 
-		PlayGamesPlatform.Activate ();
-		if (Social.localUser.authenticated) {
-			leaderBoard.SetActive (true);
-			achievements.SetActive (true);
-		}
+		logout = GameObject.Find ("Logout");
+		logout.SetActive (false);
 
+		myRectTransform = score.GetComponent<RectTransform> ();
+		
 	}
 
 	void Start ()
 	{
+		StartCoroutine (WaitTwoSeconds ());
+		if (Social.localUser.authenticated) {
+			canLogin = false;
+		}
+
 		AchievementScript.Instance.Add ("Newbie", "CgkIzv3U6eAFEAIQDQ", 1);
 		AchievementScript.Instance.Add ("Veteran", "CgkIzv3U6eAFEAIQDg", 20);
 		AchievementScript.Instance.Add ("Master", "CgkIzv3U6eAFEAIQDw", 50);
@@ -165,23 +178,39 @@ public class MainScript : MonoBehaviour
 		AchievementScript.Instance.Add ("Hard30", "CgkIzv3U6eAFEAIQGQ", 1);
 
 		AchievementScript.Instance.Add ("RealMaster", "CgkIzv3U6eAFEAIQGg", 16);
-
-		StartCoroutine (WaitTwoSeconds ());
+		b = 0;
 	}
 	
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.Escape)) {
-			Application.Quit ();
-		}
 		passingTime = finishTime - startTime;
+
 		if (Input.GetKeyDown (KeyCode.Escape)) {
-			Application.LoadLevel ("MainScene");
+			if (b == 0) {
+				Application.Quit();
+			}
+			if (b == 1) {
+				ToMenu();
+				b=0;
+			}
+			if (b == 2) {
+				ToLevels();
+				b=1;
+			}
+			if(b==3){
+				Application.LoadLevel("MainScene");
+			}
+			if(b==4){
+				ToLeaderboards();
+				b=3;
+			}
 		}
 	}
+
 	IEnumerator WaitTwoSeconds(){
 	
-		yield return new WaitForSeconds (2);
+		PlayGamesPlatform.Activate();
+		yield return new WaitForSeconds (0.5f);
 		LogIn ();
 	}
 
@@ -500,6 +529,28 @@ public class MainScript : MonoBehaviour
 
 	}
 
+	public void KeepButtonData(int x)
+	{
+		switch (x) {
+		case 0:
+			b = 0;
+			break;
+		case 1:
+			b = 1;
+			break;
+		case 2:
+			b = 2;
+			break;
+		case 3 :
+			b = 3;
+			break;
+		case 4:
+			b=4;
+			break;
+		}
+	}
+
+
 	public void ToLevels ()
 	{
 		sudoku.SetActive (false);
@@ -509,7 +560,10 @@ public class MainScript : MonoBehaviour
 		voice.SetActive (true);	
 		panels.SetActive (false);
 		leaderBoard.SetActive (false);
-		
+		achievements.SetActive (false);
+		login.SetActive (false);
+		logout.SetActive (false);
+
 	}
 
 	public void ToMenu ()
@@ -524,7 +578,20 @@ public class MainScript : MonoBehaviour
 		tutorialText.SetActive (false);
 		leaderboardLevels.SetActive (false);
 		leaderBoard.SetActive (true);
-
+		easyBoards.SetActive (false);
+		mediumBoards.SetActive (false);
+		hardBoards.SetActive (false);
+		zaman.SetActive (false);
+		EasyLevelText.SetActive (false);
+		MediumLevelText.SetActive (false);
+		HardLevelText.SetActive (false);
+		achievements.SetActive (true);
+		if (Social.localUser.authenticated) {
+			logout.SetActive (true);
+		}
+		if (!Social.localUser.authenticated) {
+			login.SetActive (true);
+		}
 	}
 
 	public void ToHowToPlay ()
@@ -538,6 +605,9 @@ public class MainScript : MonoBehaviour
 		backButton3.SetActive (true);
 		tutorialText.SetActive (true);
 		leaderBoard.SetActive (false);
+		achievements.SetActive (false);
+		logout.SetActive(false);
+		login.SetActive(false);
 	}
 
 	public void ToLeaderboards(){
@@ -548,6 +618,9 @@ public class MainScript : MonoBehaviour
 		easyBoards.SetActive (false);
 		mediumBoards.SetActive (false);
 		hardBoards.SetActive (false);
+		achievements.SetActive (false);
+		logout.SetActive(false);
+		login.SetActive(false);
 
 	}
 
@@ -569,7 +642,6 @@ public class MainScript : MonoBehaviour
 
 	public void FromEndToMenu ()
 	{
-
 		Application.LoadLevel ("MainScene");
 	}
 
@@ -706,17 +778,13 @@ public class MainScript : MonoBehaviour
 			}
 		}
 		var total2 = ((10 + passTime1) * ((selectedLevel+1) * count));
-		Debug.Log ("Selected level =" + selectedLevel);
-		Debug.Log ("Passing time = " + passingTime);
-		Debug.Log ("Pass Time 1 =" + passTime1);
-		Debug.Log ("Total =" + total);
-		Debug.Log ("Total 2 =" + total2);
-
 		total += total2; 
 		var ek = GetComponent<Score> ();
 		ek.NewFunction (total);
 
 	}
+	public bool signIn;
+	public bool canLogin = true;
 
 	public void LogIn ()
 	{
@@ -729,11 +797,36 @@ public class MainScript : MonoBehaviour
 			if (success) {
 				Debug.Log ("Login Sucess");
 				achievements.SetActive (true);
+				logout.SetActive (true);
+				login.SetActive(false);
+				achievements.SetActive(true);
+				leaderBoard.SetActive(true);
+				signIn = true;
+				canLogin = false;
 			} else {
 				Debug.Log ("Login failed");
+				signIn = false;
 			}
 		});
+	}
 
+	IEnumerator LogoutDelay()
+	{
+		((PlayGamesPlatform)Social.Active).SignOut();
+		yield return new WaitForSeconds (1);
+		login.SetActive (true);
+		logout.SetActive (false);
+		leaderBoard.SetActive (false);
+		achievements.SetActive (false);
+		signIn = false;
+		canLogin = true;
+	}
+
+	public void LogOut()
+	{
+		if (signIn) {
+			StartCoroutine(LogoutDelay());		
+		}
 	}
 
 	public void OnShowLeaderBoard (int a)
