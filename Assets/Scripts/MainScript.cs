@@ -202,7 +202,7 @@ public class MainScript : MonoBehaviour
 			}
 			if(b==4){
 				ToLeaderboards();
-				b=3;
+				b=1;
 			}
 		}
 	}
@@ -212,6 +212,7 @@ public class MainScript : MonoBehaviour
 		PlayGamesPlatform.Activate();
 		yield return new WaitForSeconds (0.5f);
 		LogIn ();
+
 	}
 
 	public enum Solution
@@ -588,10 +589,8 @@ public class MainScript : MonoBehaviour
 		achievements.SetActive (true);
 		if (Social.localUser.authenticated) {
 			logout.SetActive (true);
-		}
-		if (!Social.localUser.authenticated) {
+		} else 
 			login.SetActive (true);
-		}
 	}
 
 	public void ToHowToPlay ()
@@ -796,11 +795,10 @@ public class MainScript : MonoBehaviour
 		{
 			if (success) {
 				Debug.Log ("Login Sucess");
-				achievements.SetActive (true);
-				logout.SetActive (true);
-				login.SetActive(false);
-				achievements.SetActive(true);
 				leaderBoard.SetActive(true);
+				logout.SetActive (true);
+				achievements.SetActive (true);
+				login.SetActive(false);
 				signIn = true;
 				canLogin = false;
 			} else {
