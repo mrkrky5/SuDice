@@ -112,6 +112,7 @@
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-de\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-km-rKH\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-ar\common_strings.xml" />
+     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-af\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-am\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-es-rUS\common_strings.xml" />
@@ -131,6 +132,8 @@
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-mn-rMN\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-sw\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-si-rLK\common_strings.xml" />
+     <None Include="Assets\Plugins\Android\libs\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\GoogleMobileAdsPlugin\AndroidManifest.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-th\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\drawable\common_signin_btn_icon_dark.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-ml-rIN\common_strings.xml" />
@@ -146,7 +149,6 @@
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values\common_attrs.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values\cast_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-mr-rIN\common_strings.xml" />
-     <None Include="Assets\Plugins\Android\MainLibProj\AndroidManifest.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-lo-rLA\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-it\common_strings.xml" />
@@ -160,9 +162,10 @@
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-sr\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\drawable\cast_ic_notification_connecting.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values\wallet_styles.xml" />
-     <None Include="Assets\Plugins\Android\google-play-services_lib\AndroidManifest.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-hi\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\color\common_signin_btn_text_dark.xml" />
+     <None Include="Assets\Plugins\Android\google-play-services_lib\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\MainLibProj\AndroidManifest.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-da\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-en-rAU\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-zh-rTW\common_strings.xml" />

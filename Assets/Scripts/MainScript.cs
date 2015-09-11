@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using GooglePlayGames;
 using UnityEngine.SocialPlatforms;
 using GooglePlayGames.BasicApi;
+using GoogleMobileAds.Api;
+
 
 public class MainScript : MonoBehaviour
 {
@@ -124,6 +126,8 @@ public class MainScript : MonoBehaviour
 		HardLevelText.SetActive (false);
 
 		leaderBoard = GameObject.Find ("LeaderBoard");
+		leaderBoard.SetActive (false);
+
 		achievements = GameObject.Find ("Achievements");
 		achievements.SetActive (false);
 
@@ -377,9 +381,19 @@ public class MainScript : MonoBehaviour
 	{
 		var istrue = ControlBoard ();
 		if (istrue) {
+			StartCoroutine(WaitForAds());
 			Sifirla ();
 			SudokuGenerate ();
 		}
+	}
+
+	IEnumerator WaitForAds()
+	{
+		achievement.volume = 0.2f;	
+		achievement.Play ();
+		yield return new WaitForSeconds (2);
+		GameOver ();
+		Debug.Log ("reklamlar");
 	}
 	
 	private bool ControlBoard ()
@@ -589,8 +603,11 @@ public class MainScript : MonoBehaviour
 		achievements.SetActive (true);
 		if (Social.localUser.authenticated) {
 			logout.SetActive (true);
-		} else 
+		} else {
 			login.SetActive (true);
+			achievements.SetActive (false);
+			leaderBoard.SetActive (false);
+		}
 	}
 
 	public void ToHowToPlay ()
@@ -665,7 +682,6 @@ public class MainScript : MonoBehaviour
 			dices [i].AwakeMe ();
 		}
 		StartCoroutine (WaitSeconds ());
-
 	}
 	
 	bool sound = true;
@@ -695,20 +711,17 @@ public class MainScript : MonoBehaviour
 		EasyLevelText.SetActive (false);
 		MediumLevelText.SetActive (false);
 		HardLevelText.SetActive (false);
-		
+
 	}
 
 	IEnumerator WaitSeconds ()
 	{
 		count++;
-		Debug.Log (count);
 		NextSudoku ();
 		var eray = GameObject.FindObjectOfType<CountTime> ();
 		eray.stopped = false;
 		eray.mytext = newText;
 		newText.text = string.Format ("R E M A I N I N G  T I M E = " + ((int)eray.min).ToIntString (2) + " : " + ((int)eray.second).ToIntString (2));
-		achievement.volume = 0.2f;	
-		achievement.Play ();
 		finishTime = Time.time;
 		if (count > 0) {
 			CalculatePoints ();
@@ -727,8 +740,10 @@ public class MainScript : MonoBehaviour
 				}
 			}
 		}
-		yield return new WaitForSeconds (2);
-		
+		yield return new WaitForSeconds (2.5f);
+		RequestInterstitial ();
+		Debug.Log ("requested");
+
 		startTime = Time.time;
 		panels.SetActive (true); 
 		sudoku.SetActive (true);
@@ -784,6 +799,7 @@ public class MainScript : MonoBehaviour
 	}
 	public bool signIn;
 	public bool canLogin = true;
+	InterstitialAd interstitial;
 
 	public void LogIn ()
 	{
@@ -851,4 +867,19 @@ public class MainScript : MonoBehaviour
 			Social.ShowAchievementsUI ();
 		}
 	}
+
+	private void RequestInterstitial()
+	{
+		string adUnitId = "ca-app-pub-1571569580384263/3842311832";
+		interstitial = new InterstitialAd(adUnitId);
+		AdRequest request = new AdRequest.Builder().Build();
+		interstitial.LoadAd(request);
+	}
+	private void GameOver()
+	{
+		if (interstitial.IsLoaded()) {
+			interstitial.Show();
+		}
+	}
+
 }
