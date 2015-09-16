@@ -30,6 +30,7 @@ public class CountTime : MonoBehaviour
 				second = 60.0f;
 			}
 			mytext.text = string.Format ("T I M E = " + ((int)min).ToIntString (2) + " : " + ((int)second).ToIntString (2));
+
 			if (min < 0) {
 
 				switch(oha)
@@ -101,6 +102,13 @@ public class CountTime : MonoBehaviour
 				emre.music.Stop ();
 				emre.OnAddScoreToLeaderBoard ();
 				emre.myRectTransform.anchoredPosition = new Vector2(370,370);
+				emre.b = 3;
+				if (Input.GetKeyDown (KeyCode.Escape)) {
+					Application.LoadLevel("MainScene");
+				}
+				emre.LastAds();
+				Debug.Log("unity ads show");
+
 			}
 		}
 	}

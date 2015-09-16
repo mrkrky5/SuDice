@@ -1,7 +1,11 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
+Project("{CDFD7B81-EF40-F05F-2D21-EE9285DB419E}") = "SuDice", "Assembly-CSharp-firstpass-vs.csproj", "{A9737536-4BD0-0B01-32B1-04252D36B743}"
+EndProject
 Project("{CDFD7B81-EF40-F05F-2D21-EE9285DB419E}") = "SuDice", "Assembly-CSharp-vs.csproj", "{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}"
+EndProject
+Project("{CDFD7B81-EF40-F05F-2D21-EE9285DB419E}") = "SuDice", "Assembly-CSharp-Editor-firstpass-vs.csproj", "{ACDD5EDC-4795-07B1-026D-CEA89DF65AF8}"
 EndProject
 Project("{CDFD7B81-EF40-F05F-2D21-EE9285DB419E}") = "SuDice", "Assembly-CSharp-Editor-vs.csproj", "{62233271-FA67-58D0-29ED-2DAB507023A2}"
 EndProject
@@ -11,10 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9737536-4BD0-0B01-32B1-04252D36B743}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9737536-4BD0-0B01-32B1-04252D36B743}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9737536-4BD0-0B01-32B1-04252D36B743}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9737536-4BD0-0B01-32B1-04252D36B743}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B08B9F8-03EF-2251-534E-2F1FC09BBBA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACDD5EDC-4795-07B1-026D-CEA89DF65AF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACDD5EDC-4795-07B1-026D-CEA89DF65AF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACDD5EDC-4795-07B1-026D-CEA89DF65AF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACDD5EDC-4795-07B1-026D-CEA89DF65AF8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{62233271-FA67-58D0-29ED-2DAB507023A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62233271-FA67-58D0-29ED-2DAB507023A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62233271-FA67-58D0-29ED-2DAB507023A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -23,7 +35,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																																																																																																																																	GlobalSection(MonoDevelopProperties) = preSolution
+																																																																																																																																																																																																	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

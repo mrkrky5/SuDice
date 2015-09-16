@@ -6,6 +6,7 @@ using GooglePlayGames;
 using UnityEngine.SocialPlatforms;
 using GooglePlayGames.BasicApi;
 using GoogleMobileAds.Api;
+using UnityEngine.Advertisements;
 
 
 public class MainScript : MonoBehaviour
@@ -539,6 +540,9 @@ public class MainScript : MonoBehaviour
 		zaman.SetActive (true);
 		panels.SetActive (true);
 
+		UnityAdsInıt ();
+		Debug.Log("Unity Ads init");
+
 		StartSudoku ();
 		achievement.volume = 0;
 
@@ -877,9 +881,22 @@ public class MainScript : MonoBehaviour
 	}
 	private void GameOver()
 	{
-		if (interstitial.IsLoaded()) {
-			interstitial.Show();
+		if (interstitial.IsLoaded ()) {
+			interstitial.Show ();
 		}
 	}
 
+	public void UnityAdsInıt()
+	{
+		if (Advertisement.isSupported) {
+			Advertisement.Initialize ("72932");
+		}
+	}
+
+	public void LastAds()
+	{
+		if (Advertisement.isInitialized) {
+			Advertisement.Show ();
+		}
+	}
 }

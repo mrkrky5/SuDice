@@ -5,17 +5,34 @@ using UnityEngine.UI;
 
 public class Dice : MonoBehaviour {
 
-	private const int ON = 4;
-	private const int SAG = 2;
-	private const int SOL = 5;
-	private const int UST = 3;
-	private const int ALT = 1;
-
-	private MeshRenderer rend;
+	public GameObject[] beyazOn = new GameObject[6];
+	public GameObject[] pinnedOn = new GameObject[6]; 
+	public GameObject[] lockedOn = new GameObject[6]; 
+	public GameObject[] beyazUst = new GameObject[6];
+	public GameObject[] beyazAlt = new GameObject[6]; 
+	public GameObject[] beyazSag = new GameObject[6];
+	public GameObject[] beyazSol = new GameObject[6];
+	public GameObject zar1;
+	public GameObject zar2; 
+	public GameObject zar3; 
 
 	public AudioSource diceSound;
 
-	private int dakika;
+
+	public void Awake()
+	{
+		zar2.SetActive (false);
+		zar3.SetActive (false);
+		for (int i=0; i<6; i++) {
+			lockedOn[i].SetActive(false);
+			beyazOn[i].SetActive(false);
+			beyazAlt[i].SetActive(false);
+			beyazUst[i].SetActive(false);
+			beyazSol[i].SetActive(false);
+			beyazSag[i].SetActive(false);
+			pinnedOn[i].SetActive(false);
+		}
+	}
 
 	public int _value = -1;
 	public int Value{
@@ -34,12 +51,14 @@ public class Dice : MonoBehaviour {
 		set{
 			locked=value;
 			if(value){
-				rend.materials[4].color=new Color(0.1f,0.3f,0.5f);
-				rend.materials[0].color=new Color(0.1f,0.3f,0.5f);
+				lockedOn[Value].SetActive(true);
+				zar3.SetActive(true);
+				zar1.SetActive(false);
 			}
 			else{
-				rend.materials[4].color=new Color (1,1,1);
-			    rend.materials[0].color=new Color(1,1,1);
+				lockedOn[Value].SetActive(false);
+				zar3.SetActive(false);
+				zar1.SetActive(true);
 		}
 	}
 }
@@ -50,14 +69,17 @@ public class Dice : MonoBehaviour {
 			pinned=value;
 			if(value)
 			{
-				rend.materials[4].color=new Color(0.3f,0.58f,0.68f);
-				rend.materials[0].color=new Color(0.3f,0.58f,0.68f);
+				beyazOn[Value].SetActive(false);
+				pinnedOn[Value].SetActive(true);
+				zar2.SetActive(true);		
 			}			
 			else
 			{
-				rend.materials[4].color=new Color (1,1,1);
-				rend.materials[0].color=new Color(1,1,1);
-			}		}
+				beyazOn[Value].SetActive(true);
+				pinnedOn[Value].SetActive(false);
+				zar2.SetActive(false);
+			}	
+		}
 	}
 	
 	private bool IsAnimationPlaying;
@@ -88,7 +110,6 @@ public class Dice : MonoBehaviour {
 	}
 
 	 public void AwakeMe(){
-		rend = GetComponent<MeshRenderer> ();
 		if (Value == -1) {
 			_value = Random.Range (0, 6);
 		} 
@@ -99,29 +120,63 @@ public class Dice : MonoBehaviour {
 	}
 
 	private void Set(){
-		rend.materials [ON].mainTexture = MainScript.Instance.textures [Value];
 		transform.rotation = Quaternion.Euler (0, 0, 0);
+		foreach (var go in beyazOn) {
+			go.SetActive(false);
+		}
+		if (Locked) {
+			lockedOn [Value].SetActive (true);
+		} else if (Pinned) {
+		pinnedOn [Value].SetActive (true);
+		} else {
+			beyazOn [Value].SetActive (true);
+		}
 	}
 
 	private void PreSet()
 	{
 		if (IsDirectionVertical) {
 			if (TargetAngle > 0) {
-				rend.materials [ALT].mainTexture = MainScript.Instance.textures [Value];
+				SetVisible(beyazAlt[Value]);
+				Debug.Log("fak");
 			} else {
-				rend.materials [UST].mainTexture = MainScript.Instance.textures [Value];
+				SetVisible(beyazUst[Value]);			
 			}
 		} else {
 			if(TargetAngle>0)
 			{
-				rend.materials [SAG].mainTexture = MainScript.Instance.textures [Value];
+				SetVisible(beyazSag[Value]);			
 			}
 			else
 			{
-				rend.materials [SOL].mainTexture = MainScript.Instance.textures [Value];
+				SetVisible(beyazSol[Value]);		
 			}
 		}
 		PlayAnimation ();
+	}
+
+	private void SetVisible(GameObject go)
+	{
+		GameObject[][] gos = new GameObject[6][];
+		gos [0] = beyazAlt;
+		gos [1] = beyazUst;
+		gos [2] = beyazSag;
+		gos [3] = beyazSol;
+		gos [4] = lockedOn;
+		gos [5] = pinnedOn;
+
+		foreach (GameObject[] list in gos) {
+		foreach(GameObject gogo in list)
+			{
+				if(gogo == go)
+				{
+					gogo.SetActive(true);
+				}
+				else{
+					gogo.SetActive(false);
+				}
+			}
+		}
 	}
 
 	private void PlayAnimation()
