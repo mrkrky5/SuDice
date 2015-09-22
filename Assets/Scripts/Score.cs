@@ -16,6 +16,6 @@ public class Score : MonoBehaviour
 	// Update is called once per frame
 	public void NewFunction (int total)
 	{
-		scoreText.text = string.Format ("Y O U R  S C O R E = " + total);
+		scoreText.text = string.Format ("S C O R E = " + total);
 	}
 }
