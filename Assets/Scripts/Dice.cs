@@ -138,7 +138,6 @@ public class Dice : MonoBehaviour {
 		if (IsDirectionVertical) {
 			if (TargetAngle > 0) {
 				SetVisible(beyazAlt[Value]);
-				Debug.Log("fak");
 			} else {
 				SetVisible(beyazUst[Value]);			
 			}
